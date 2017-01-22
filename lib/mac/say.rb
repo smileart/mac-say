@@ -1,0 +1,1 @@
+require 'mac/say/version'
