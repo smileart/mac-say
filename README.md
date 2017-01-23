@@ -1,7 +1,9 @@
 # mac-say
 
-<div style="text-align:center"> <img title="mac-say logo" src ="./img/logo.png" /> </div>
-
+<p align="center">
+  <img title="mac-say logo" src ="./img/logo.png" />
+</p>
+    
 > Ruby wrapper around the modern version of the Mac OS X say command. Inspired by the @bratta's [mactts](https://github.com/bratta/mactts)
 
 * [Homepage](https://rubygems.org/gems/mac-say)
