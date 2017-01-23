@@ -1,35 +1,5 @@
-# mac-say
-
-![mac-say](./img/logo.png)
-
-> Ruby wrapper around the modern version of the Mac OS X say command. Inspired by the @bratta's [mactts](https://github.com/bratta/mactts)
-
-* [Homepage](https://rubygems.org/gems/mac-say)
-* [Documentation](http://rubydoc.info/gems/mac-say/frames)
-* [Email](mailto:smileart21 at gmail.com)
-
-## Features
-
-* [x] Basic strings reading
-* [x] Basic files reading
-* [x] Multiline strings support
-* [x] Dynamic voices parsing (based on real `say` output)
-* [x] Voices list generation (including samples and ISO information) 
-* [x] Voices search (by name / language / country)
-* [x] Simple (class-level) and customisable (instance-level) usage
-* [ ] Audio output support
-
-## Install
-
-```sh
-$ gem install mac-say
-```
-
-## Examples
-
-```ruby
 require 'pp'
-require 'mac/say'
+require_relative '../lib/mac/say'
 
 # ===== Class level =====
 
@@ -108,7 +78,7 @@ file_path = '../test/fixtures/text/en_gb.txt'
 file_path = File.expand_path File.join(current_dir, file_path)
 
 # with a voice from the class
-voice = Mac::Say.voice(:country, :gb)[:name]
+voice = Mac::Say.voice(:country, :gb)&.first[:name]
 reader = Mac::Say.new(file: file_path, voice: voice)
 reader.read
 
@@ -193,21 +163,4 @@ begin
 rescue Mac::Say::UnknownVoiceFeature => e
   puts e.message
 end
-```
 
-## Installing & Updating MacOS TTS Voices
-
-Open `System Preferences` using Spotlight / Alfred / Dock and follow text or visual instructions:
-
-```
-System Preferences → Accessibility → Speech → System Voice →
-→ Customize… → (select voices) → OK → (Wait for download…)
-```
-
-![Installing & Updating MacOS TTS Voices](./img/voices_manual.png)
-
-## Copyright
-
-Copyright (c) 2017 Serge Bedzhyk
-
-See [LICENSE.txt](./LICENSE.txt) for details.
