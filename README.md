@@ -1,6 +1,6 @@
 # mac-say
 
-![mac-say](./img/logo.png)
+<div style="text-align:center"> <img title="mac-say logo" src ="./img/logo.png" /> </div>
 
 > Ruby wrapper around the modern version of the Mac OS X say command. Inspired by the @bratta's [mactts](https://github.com/bratta/mactts)
 
