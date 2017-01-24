@@ -53,7 +53,7 @@ describe 'Mac::Say as a macOS `say` wrapper' do
     end
 
     it "#say must return 0 in successive speech" do
-      @reader.say(string: 'yes').must_equal 0
+      @reader.say(string: '42').must_equal 0
     end
   end
 end
