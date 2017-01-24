@@ -22,7 +22,7 @@ pp Mac::Say.voice(:language, :en)
 indian_english = Mac::Say.voice(:country, :in).select {|v| v[:iso_code][:language] == :en}.first[:name]
 
 # Use multiline text
-puts Mac::Say.say(<<-DATA, indian_english)
+puts Mac::Say.say <<-DATA, indian_english
   Invokes the given block passing in successive elements from self, deleting elements for which the block returns a false value.
   The array may not be changed instantly every time the block is called.
   If changes were made, it will return self, otherwise it returns nil.
@@ -89,7 +89,6 @@ reader.read voice: voice
 
 # with a dynamic voice from the instance
 reader = Mac::Say.new(file: file_path)
-require 'letters'
 reader.read(voice: reader.voice(:country, :us)[2][:name])
 
 # with a dynamic voice from the instance
@@ -163,4 +162,3 @@ begin
 rescue Mac::Say::UnknownVoiceFeature => e
   puts e.message
 end
-

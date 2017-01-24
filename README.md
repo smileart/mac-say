@@ -4,7 +4,7 @@
   <img title="mac-say logo" src ="./img/logo.png" />
 </p>
     
-> Ruby wrapper around the modern version of the Mac OS X say command. Inspired by the @bratta's [mactts](https://github.com/bratta/mactts)
+> Ruby wrapper around the modern version of the macOS `say` command. Inspired by the @bratta's [mactts](https://github.com/bratta/mactts)
 
 * [Homepage](https://rubygems.org/gems/mac-say)
 * [Documentation](http://rubydoc.info/gems/mac-say/frames)
@@ -110,7 +110,7 @@ file_path = '../test/fixtures/text/en_gb.txt'
 file_path = File.expand_path File.join(current_dir, file_path)
 
 # with a voice from the class
-voice = Mac::Say.voice(:country, :gb)[:name]
+voice = Mac::Say.voice(:country, :gb)&.first[:name]
 reader = Mac::Say.new(file: file_path, voice: voice)
 reader.read
 
@@ -121,7 +121,6 @@ reader.read voice: voice
 
 # with a dynamic voice from the instance
 reader = Mac::Say.new(file: file_path)
-require 'letters'
 reader.read(voice: reader.voice(:country, :us)[2][:name])
 
 # with a dynamic voice from the instance

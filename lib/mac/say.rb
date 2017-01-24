@@ -25,8 +25,8 @@ module Mac
     # @param file [String] (nil) path to the file to read
     def initialize(**args)
       @config = DEFAULTS.merge args
-      voices
-      raise VoiceNotFound, "Voice '#{@config[:voice]}' isn't a valid voice" unless valid_voice?(@config[:voice])
+      load_voices
+      raise VoiceNotFound, "Voice '#{@config[:voice]}' isn't a valid voice" unless valid_voice? @config[:voice]
     end
 
     def self.say(string, voice = :alex)
@@ -66,24 +66,6 @@ module Mac
       mac.voices
     end
 
-    def voices
-      raise CommandNotFound, "Command `say` couldn't be found by '#{@config[:say_path]}' path" unless valid_command_path? @config[:say_path]
-      return @voices if @voices
-
-      output = `#{@config[:say_path]} -v '?'`
-
-      voices = output.scan VOICES_PATTERN
-      @voices = voices.map do |voice|
-        lang = voice[1].split(/[_-]/)
-
-        {
-          name: voice[0].downcase.to_sym,
-          iso_code: {language: lang[0].downcase.to_sym, country: lang[1].downcase.to_sym},
-          sample: voice[2]
-        }
-      end
-    end
-
     alias_method :read, :say
 
     private
@@ -106,6 +88,24 @@ module Mac
       "#{@config[:say_path]}#{file} -v '#{@config[:voice]}' -r #{@config[:rate].to_i}"
     end
 
+    def load_voices
+      return if @voices
+      raise CommandNotFound, "Command `say` couldn't be found by '#{@config[:say_path]}' path" unless valid_command_path? @config[:say_path]
+
+      output = `#{@config[:say_path]} -v '?'`
+
+      @voices = output.scan VOICES_PATTERN
+      @voices.map! do |voice|
+        lang = voice[1].split(/[_-]/)
+
+        {
+          name: voice[0].downcase.to_sym,
+          iso_code: {language: lang[0].downcase.to_sym, country: lang[1].downcase.to_sym},
+          sample: voice[2]
+        }
+      end
+    end
+
     def valid_voice?(name)
       v = voice(:name, name)
       v && !v.empty?
@@ -120,7 +120,3 @@ module Mac
     end
   end
 end
-
-if __FILE__ == $0
-end
-
