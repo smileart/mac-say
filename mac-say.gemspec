@@ -7,8 +7,8 @@ require 'mac/say/version'
 Gem::Specification.new do |gem|
   gem.name          = "mac-say"
   gem.version       = Mac::Say::VERSION
-  gem.summary       = %q{TODO: Summary}
-  gem.description   = %q{TODO: Description}
+  gem.summary       = %q{Ruby wrapper around the macOS `say` command}
+  gem.description   = %q{Ruby wrapper around the modern version of the macOS `say` command. Inspired by the @bratta's mactts}
   gem.license       = "MIT"
   gem.authors       = ["Serge Bedzhyk"]
   gem.email         = "smileart21@gmail.com"
@@ -31,7 +31,9 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'bundler', '~> 1.10'
   gem.add_development_dependency 'minitest', '~> 5.0'
-  gem.add_development_dependency 'rake', '~> 10.0'
+  gem.add_development_dependency 'minitest-reporters', '~> 1.1'
+  gem.add_development_dependency 'rake', '~> 12.0'
+  gem.add_development_dependency 'simplecov', '~> 0.12'
   gem.add_development_dependency 'rubygems-tasks', '~> 0.2'
   gem.add_development_dependency 'yard', '~> 0.8'
 end

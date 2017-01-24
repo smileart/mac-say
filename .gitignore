@@ -3,9 +3,10 @@
 /Gemfile.lock
 /doc/
 /pkg/
+/coverage/
 /vendor/cache/*.gem
 
-#********** osx template********** 
+#********** osx template**********
 
 .DS_Store
 
@@ -15,4 +16,4 @@
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
- 
+

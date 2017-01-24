@@ -25,6 +25,7 @@ module Mac
     # @param file [String] (nil) path to the file to read
     def initialize(**args)
       @config = DEFAULTS.merge args
+      @voices = nil
       load_voices
       raise VoiceNotFound, "Voice '#{@config[:voice]}' isn't a valid voice" unless valid_voice? @config[:voice]
     end
@@ -112,7 +113,7 @@ module Mac
     end
 
     def valid_command_path?(path)
-      File.exists?(path) && File.executable?(path)
+      File.exist?(path) && File.executable?(path)
     end
 
     def valid_file_path?(path)

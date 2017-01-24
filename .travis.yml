@@ -1,5 +1,6 @@
 ---
 language: ruby
+osx_image: xcode8.2
 rvm:
   - 2.0
   - 2.1
