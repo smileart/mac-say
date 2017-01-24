@@ -2,7 +2,6 @@
 before_install:
   - gem update bundler
 language: ruby
-osx_image: xcode8.2
 os: osx
 script:
   - bundle exec rake test
