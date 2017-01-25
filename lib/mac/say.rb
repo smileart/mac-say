@@ -4,7 +4,7 @@ require 'English'
 module Mac
   class Say
     DEFAULTS = {
-      say_path: '/usr/bin/say',
+      say_path: ENV['USE_FAKE_SAY'] ? ENV['USE_FAKE_SAY'] : '/usr/bin/say',
       voice: :alex,
       rate: 175,
       file: nil

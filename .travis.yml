@@ -2,9 +2,10 @@
 before_install:
   - gem update bundler
 language: ruby
-os: osx
 script:
   - bundle exec rake test
+env:
+  - USE_FAKE_SAY=./test/fake/say
 rvm:
   - 2.0
   - 2.1

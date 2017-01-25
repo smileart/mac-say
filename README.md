@@ -207,6 +207,16 @@ System Preferences → Accessibility → Speech → System Voice →
 
 ![Installing & Updating MacOS TTS Voices](./img/voices_manual.png)
 
+## Dev Notes
+
+```sh
+# generated with Ore: https://github.com/ruby-ore/ore
+$ mine mac-say --git --mit --rubygems-tasks --markdown --minitest --travis --yard
+
+# test with a fake `say`
+$ USE_FAKE_SAY='./test/fake/say' bundle exec rake test
+```
+
 ## Copyright
 
 Copyright (c) 2017 Serge Bedzhyk

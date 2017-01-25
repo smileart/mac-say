@@ -1,0 +1,58 @@
+#! /usr/bin/env ruby
+require 'optparse'
+
+VOICES = <<-VOICES
+Alex                en_US    # Most people recognize me by my voice.
+Daniel              en_GB    # Hello, my name is Daniel. I am a British-English voice.
+Fiona               en-scotland # Hello, my name is Fiona. I am a Scottish-English voice.
+Ting-Ting           zh_CN    # 您好，我叫Ting-Ting。我讲中文普通话。
+Veena               en_IN    # Hello, my name is Veena. I am an Indian-English voice.
+VOICES
+
+VOICES_NAMES = [
+  :alex,
+  :daniel,
+  :fiona,
+  :'ting-ting',
+  :veena
+]
+
+options = {
+  voice: :alex
+}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: say [options]"
+
+  opts.on("-v VOICE") do |v|
+    options[:voice] = v.to_sym
+  end
+
+  opts.on("-r RATE") do |r|
+    options[:rate] = r.to_i
+  end
+
+  opts.on("-f FILE") do |f|
+    options[:file] = f
+  end
+end.parse!
+
+if !STDIN.tty? && !STDIN.closed?
+  input = STDIN.read
+end
+
+if options[:voice]
+  (print VOICES; exit 0) if options[:voice] == :'?'
+  exit 1 unless VOICES_NAMES.include?(options[:voice])
+  exit 0 if input && !input.empty?
+end
+
+if options[:file]
+  current_dir = File.expand_path(File.dirname(__FILE__))
+  file_path = options[:file]
+  file_path = File.expand_path File.join(current_dir, file_path)
+
+  File.exist?(file_path) ? exit(0) : exit(127)
+end
+
+exit 1
