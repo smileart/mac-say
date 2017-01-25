@@ -26,6 +26,31 @@ describe 'Mac::Say as a macOS `say` wrapper' do
       voice[:iso_code].keys.must_equal [:language, :country]
     end
 
+    it "::voice must search for a voice by name" do
+      voice = Mac::Say.voice(:name, :alex)
+      voice[:name].must_equal :alex
+    end
+
+    it "::voice must search for a voice by country" do
+      voice = Mac::Say.voice(:country, :scotland)
+      voice[:name].must_equal :fiona
+    end
+
+    it "::voice must search for a voice by language" do
+      voices = Mac::Say.voice(:language, :en)
+      voices.count.must_be :>, 2
+    end
+
+    it "::voice must return one voice as a Hash" do
+      voice = Mac::Say.voice(:name, :alex)
+      voice.must_be_kind_of Hash
+    end
+
+    it "::voice must return an Array of voices if > 1" do
+      voices = Mac::Say.voice(:country, :gb)
+      voices.must_be_kind_of Array
+    end
+
     it "::say must return 0 in successive speech" do
       Mac::Say.say('42').must_equal 0
     end

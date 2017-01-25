@@ -57,8 +57,12 @@ module Mac
     def voice(feature, value)
       raise UnknownVoiceFeature, "Voice has no '#{feature}' feature" unless [:name, :language, :country].include?(feature)
 
-      return @voices.find_all {|v| v[feature] == value} if feature == :name
-      found_voices = @voices.find_all {|v| v[:iso_code][feature] == value}
+      if feature == :name
+        found_voices = @voices.find_all {|v| v[feature] == value}
+      else
+        found_voices = @voices.find_all {|v| v[:iso_code][feature] == value}
+      end
+
       found_voices.count == 1 ? found_voices.first : found_voices
     end
 

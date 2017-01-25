@@ -5,6 +5,8 @@
 </p>
     
 > Ruby wrapper around the modern version of the macOS `say` command. Inspired by the @bratta's [mactts](https://github.com/bratta/mactts)
+> 
+> [![Build Status](https://travis-ci.org/smileart/mac-say.svg?branch=dev)](https://travis-ci.org/smileart/mac-say)
 
 * [Homepage](https://rubygems.org/gems/mac-say)
 * [Documentation](http://rubydoc.info/gems/mac-say/frames)
@@ -19,7 +21,8 @@
 * [x] Voices list generation (including samples and ISO information) 
 * [x] Voices search (by name / language / country)
 * [x] Simple (class-level) and customisable (instance-level) usage
-* [ ] Audio output support
+* [ ] Observe reading progress line by line❓
+* [ ] Audio output support❓
 
 ## Install
 
@@ -215,6 +218,9 @@ $ mine mac-say --git --mit --rubygems-tasks --markdown --minitest --travis --yar
 
 # test with a fake `say`
 $ USE_FAKE_SAY='./test/fake/say' bundle exec rake test
+
+# run one test by LN
+$ m ./test/test_mac-say.rb:34
 ```
 
 ## Copyright
