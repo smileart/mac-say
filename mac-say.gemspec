@@ -36,5 +36,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'simplecov', '~> 0.12'
   gem.add_development_dependency 'rubygems-tasks', '~> 0.2'
   gem.add_development_dependency 'yard', '~> 0.8'
-  gem.add_development_dependency "m", "~> 1.5.0"
+  gem.add_development_dependency 'm', '~> 1.5.0'
+  gem.add_development_dependency 'coveralls', '~> 0.8'
 end

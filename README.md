@@ -57,7 +57,7 @@ pp Mac::Say.voice(:language, :en)
 indian_english = Mac::Say.voice(:country, :in).select {|v| v[:iso_code][:language] == :en}.first[:name]
 
 # Use multiline text
-puts Mac::Say.say(<<-DATA, indian_english)
+puts Mac::Say.say <<-DATA, indian_english
   Invokes the given block passing in successive elements from self, deleting elements for which the block returns a false value.
   The array may not be changed instantly every time the block is called.
   If changes were made, it will return self, otherwise it returns nil.
@@ -107,10 +107,7 @@ end
 # ===== Reading files =====
 
 # Read the file (prior to the string)
-current_dir = File.expand_path(File.dirname(__FILE__))
-
-file_path = '../test/fixtures/text/en_gb.txt'
-file_path = File.expand_path File.join(current_dir, file_path)
+file_path = File.absolute_path '../test/fixtures/text/en_gb.txt', File.dirname(__FILE__)
 
 # with a voice from the class
 voice = Mac::Say.voice(:country, :gb)&.first[:name]
@@ -127,8 +124,7 @@ reader = Mac::Say.new(file: file_path)
 reader.read(voice: reader.voice(:country, :us)[2][:name])
 
 # with a dynamic voice from the instance
-new_file_path = '../test/fixtures/text/en_us.txt'
-new_file_path = File.expand_path File.join(current_dir, new_file_path)
+new_file_path = File.absolute_path '../test/fixtures/text/en_us.txt', File.dirname(__FILE__)
 
 # with a dynamic file change
 reader = Mac::Say.new(file: file_path)
@@ -219,8 +215,14 @@ $ mine mac-say --git --mit --rubygems-tasks --markdown --minitest --travis --yar
 # test with a fake `say`
 $ USE_FAKE_SAY='./test/fake/say' bundle exec rake test
 
+# test with rake
+$ bundle exec rake test
+
+# test with m
+$ bundle exec m
+
 # run one test by LN
-$ m ./test/test_mac-say.rb:34
+$ bundle exec m ./test/test_mac-say.rb:34
 ```
 
 ## Copyright

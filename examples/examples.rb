@@ -72,10 +72,7 @@ end
 # ===== Reading files =====
 
 # Read the file (prior to the string)
-current_dir = File.expand_path(File.dirname(__FILE__))
-
-file_path = '../test/fixtures/text/en_gb.txt'
-file_path = File.expand_path File.join(current_dir, file_path)
+file_path = File.absolute_path '../test/fixtures/text/en_gb.txt', File.dirname(__FILE__)
 
 # with a voice from the class
 voice = Mac::Say.voice(:country, :gb)&.first[:name]
@@ -92,8 +89,7 @@ reader = Mac::Say.new(file: file_path)
 reader.read(voice: reader.voice(:country, :us)[2][:name])
 
 # with a dynamic voice from the instance
-new_file_path = '../test/fixtures/text/en_us.txt'
-new_file_path = File.expand_path File.join(current_dir, new_file_path)
+new_file_path = File.absolute_path '../test/fixtures/text/en_us.txt', File.dirname(__FILE__)
 
 # with a dynamic file change
 reader = Mac::Say.new(file: file_path)

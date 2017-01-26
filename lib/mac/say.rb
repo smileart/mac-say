@@ -17,7 +17,7 @@ module Mac
     class VoiceNotFound < StandardError; end
     class UnknownVoiceFeature < StandardError; end
 
-    attr_reader :voices
+    attr_reader :voices, :config
 
     # @param say_path [String] ('/usr/bin/say') the full path to the say app binary
     # @param voice [Symbol] (:alex) voice to be used by the say command
@@ -35,7 +35,7 @@ module Mac
       mac.say(string: string)
     end
 
-    def say(string: nil, file: nil, voice: nil)
+    def say(string: nil, file: nil, voice: nil, rate: nil)
       if voice
         raise VoiceNotFound, "Voice '#{voice}' isn't a valid voice" unless valid_voice?(voice)
         @config[:voice] = voice
@@ -45,6 +45,8 @@ module Mac
         raise FileNotFound, "File '#{file}' wasn't found or it's not readable by the current user" unless valid_file_path?(file)
         @config[:file] = file
       end
+
+      @config[:rate] = rate if rate
 
       execute_command(string)
     end
@@ -76,10 +78,11 @@ module Mac
     private
 
     def execute_command(string = nil)
-      say = IO.popen(generate_command, 'w+')
+      say_command = generate_command
+      say = IO.popen(say_command, 'w+')
       say.write(string) if string
       say.close
-      $CHILD_STATUS.exitstatus
+      return say_command, $CHILD_STATUS.exitstatus
     end
 
     def generate_command
@@ -105,7 +108,7 @@ module Mac
 
         {
           name: voice[0].downcase.to_sym,
-          iso_code: {language: lang[0].downcase.to_sym, country: lang[1].downcase.to_sym},
+          iso_code: { language: lang[0].downcase.to_sym, country: lang[1].downcase.to_sym },
           sample: voice[2]
         }
       end
@@ -121,7 +124,7 @@ module Mac
     end
 
     def valid_file_path?(path)
-      path && File.exists?(path) && File.readable?(path)
+      path && File.exist?(path) && File.readable?(path)
     end
   end
 end
