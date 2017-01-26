@@ -6,7 +6,7 @@
     
 > Ruby wrapper around the modern version of the macOS `say` command. Inspired by the @bratta's [mactts](https://github.com/bratta/mactts)
 > 
-> [![Build Status](https://travis-ci.org/smileart/mac-say.svg?branch=dev)](https://travis-ci.org/smileart/mac-say)
+> [![Build Status](https://travis-ci.org/smileart/mac-say.svg?branch=dev)](https://travis-ci.org/smileart/mac-say) [![Coverage Status](https://coveralls.io/repos/github/smileart/mac-say/badge.svg?branch=dev)](https://coveralls.io/github/smileart/mac-say?branch=dev)
 
 * [Homepage](https://rubygems.org/gems/mac-say)
 * [Documentation](http://rubydoc.info/gems/mac-say/frames)
