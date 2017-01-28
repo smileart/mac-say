@@ -71,13 +71,13 @@ module Mac
     # @raise [VoiceNotFound] if the given voice doesn't exist or wasn't installed
     def initialize(voice: :alex, rate: 175, file: nil, say_path: '/usr/bin/say')
       args = {
-        voice: :alex,
-        rate: 175,
-        file: nil,
-        say_path: '/usr/bin/say'
+        voice: voice,
+        rate: rate,
+        file: file,
+        say_path: say_path
       }
 
-      @config = DEFAULTS.merge args
+      @config = DEFAULTS.merge(args)
       @voices = nil
       load_voices
 
@@ -266,6 +266,7 @@ module Mac
     # @raise [CommandNotFound] if the say command wasn't found
     def valid_voice?(name)
       load_voices unless @voices
+
       v = voice(:name, name)
       v && !v.empty?
     end

@@ -22,6 +22,6 @@ Rake::TestTask.new do |test|
   test.verbose = true
 end
 
-require 'yard'
-YARD::Rake::YardocTask.new
-task :doc => :yard
+# require 'yard'
+# YARD::Rake::YardocTask.new
+# task :doc => :yard
