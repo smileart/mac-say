@@ -1,4 +1,4 @@
-# encoding: utf-8
+  # encoding: utf-8
 
 require 'rubygems'
 
@@ -23,5 +23,5 @@ Rake::TestTask.new do |test|
 end
 
 require 'yard'
-YARD::Rake::YardocTask.new  
+YARD::Rake::YardocTask.new
 task :doc => :yard

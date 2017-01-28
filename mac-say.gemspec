@@ -35,7 +35,10 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake', '~> 12.0'
   gem.add_development_dependency 'simplecov', '~> 0.12'
   gem.add_development_dependency 'rubygems-tasks', '~> 0.2'
-  gem.add_development_dependency 'yard', '~> 0.8'
-  gem.add_development_dependency 'm', '~> 1.5.0'
+  gem.add_development_dependency 'yard', '~> 0.8.7.5'
+  gem.add_development_dependency 'inch', '~> 0.7.1'
+  gem.add_development_dependency 'redcarpet', '~> 3.4'
+  gem.add_development_dependency 'github-markup', '~> 1.4'
+  gem.add_development_dependency 'm', '~> 1.5'
   gem.add_development_dependency 'coveralls', '~> 0.8'
 end

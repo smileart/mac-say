@@ -102,6 +102,11 @@ describe 'Mac::Say as a macOS `say` wrapper' do
       @reader.say(string: '42').must_equal expectation
     end
 
+    it "#read must be a synonym of #say" do
+      expectation = ["#{@say_path} -v 'alex' -r 175", 0]
+      @reader.read(string: '42').must_equal expectation
+    end
+
     it "#say must support :file" do
       absolute_path = File.absolute_path './fixtures/text/en_gb_test.txt', File.dirname(__FILE__)
       expectation = ["#{@say_path} -f #{absolute_path} -v 'alex' -r 175", 0]
@@ -168,8 +173,6 @@ describe 'Mac::Say as a macOS `say` wrapper' do
 
       @reader.say(string: '13').must_equal expectation
     end
-
-    # ============================================================
 
     it "#say must fail on wrong initial voice" do
       -> {

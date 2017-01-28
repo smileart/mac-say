@@ -3,10 +3,10 @@
 <p align="center">
   <img title="mac-say logo" src ="./img/logo.png" />
 </p>
-    
+
 > Ruby wrapper around the modern version of the macOS `say` command. Inspired by the @bratta's [mactts](https://github.com/bratta/mactts)
-> 
-> [![Build Status](https://travis-ci.org/smileart/mac-say.svg?branch=dev)](https://travis-ci.org/smileart/mac-say) [![Coverage Status](https://coveralls.io/repos/github/smileart/mac-say/badge.svg?branch=dev)](https://coveralls.io/github/smileart/mac-say?branch=dev)
+>
+> [![Build Status](https://travis-ci.org/smileart/mac-say.svg?branch=dev)](https://travis-ci.org/smileart/mac-say) [![Coverage Status](https://coveralls.io/repos/github/smileart/mac-say/badge.svg?branch=dev)](https://coveralls.io/github/smileart/mac-say?branch=dev) [![InchCI Status](https://inch-ci.org/github/smileart/mac-say.svg?branch=dev)](https://inch-ci.org/github/smileart/mac-say)
 
 * [Homepage](https://rubygems.org/gems/mac-say)
 * [Documentation](http://rubydoc.info/gems/mac-say/frames)
@@ -18,7 +18,7 @@
 * [x] Basic files reading
 * [x] Multiline strings support
 * [x] Dynamic voices parsing (based on real `say` output)
-* [x] Voices list generation (including samples and ISO information) 
+* [x] Voices list generation (including samples and ISO information)
 * [x] Voices search (by name / language / country)
 * [x] Simple (class-level) and customisable (instance-level) usage
 * [ ] Observe reading progress line by line❓
@@ -211,6 +211,12 @@ System Preferences → Accessibility → Speech → System Voice →
 ```sh
 # generated with Ore: https://github.com/ruby-ore/ore
 $ mine mac-say --git --mit --rubygems-tasks --markdown --minitest --travis --yard
+
+# generate docs (unless this resolved: https://github.com/rrrene/inch/issues/42)
+$ yard --markup markdown --markup-provider=redcarpet --title "mac-say Documentation" --protected --asset img:img
+
+# check the docs
+$ inch --pedantic
 
 # test with a fake `say`
 $ USE_FAKE_SAY='./test/fake/say' bundle exec rake test
