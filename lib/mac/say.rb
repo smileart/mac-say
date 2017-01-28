@@ -7,15 +7,6 @@ module Mac
   # A class wrapper around the MacOS `say` commad
   # Allows to use simple TTS on Mac right from Ruby scripts
   class Say
-    # Default Say configuration
-    # Use USE_FAKE_SAY environment variable to fake the actual `say` command
-    DEFAULTS = {
-      say_path: ENV['USE_FAKE_SAY'] ? ENV['USE_FAKE_SAY'] : '/usr/bin/say',
-      voice: :alex,
-      rate: 175,
-      file: nil
-    }
-
     # A regex pattern to parse say voices list output
     VOICES_PATTERN = %r{(^[\w-]+)\s+([\w-]+)\s+#\s([\p{Graph}\p{Zs}]+$)}i
 
@@ -63,21 +54,20 @@ module Mac
 
     # Say constructor: sets initial configuration for say command to use
     #
-    # @param say_path [String] the full path to the say app binary (default: '/usr/bin/say')
+    # @param say_path [String] the full path to the say app binary (default: '/usr/bin/say' or USE_FAKE_SAY environment variable)
     # @param voice [Symbol] voice to be used by the say command (default: :alex)
     # @param rate [Integer] speech rate in words per minute (default: 175) accepts values in (175..720)
     # @param file [String] path to the file to read (default: nil)
     #
     # @raise [VoiceNotFound] if the given voice doesn't exist or wasn't installed
-    def initialize(voice: :alex, rate: 175, file: nil, say_path: '/usr/bin/say')
-      args = {
+    def initialize(voice: :alex, rate: 175, file: nil, say_path: ENV['USE_FAKE_SAY'] ? ENV['USE_FAKE_SAY'] : '/usr/bin/say')
+      @config = {
+        say_path: say_path,
         voice: voice,
         rate: rate,
-        file: file,
-        say_path: say_path
+        file: file
       }
 
-      @config = DEFAULTS.merge(args)
       @voices = nil
       load_voices
 

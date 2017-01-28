@@ -22,6 +22,7 @@ Rake::TestTask.new do |test|
   test.verbose = true
 end
 
+# Wait for https://github.com/rrrene/inch/issues/42 to be resolved
 # require 'yard'
 # YARD::Rake::YardocTask.new
 # task :doc => :yard
