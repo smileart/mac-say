@@ -1,0 +1,15 @@
+AllCops:
+  TargetRubyVersion: 2.3
+  Exclude:
+    - 'test/test_mac-say.rb'
+    - 'mac-say.gemspec'
+Metrics/AbcSize:
+  Max: 18
+Style/AsciiComments:
+  Enabled: false
+Style/MutableConstant:
+  Enabled: false
+Metrics/LineLength:
+  Max: 130
+Metrics/MethodLength:
+  Max: 11

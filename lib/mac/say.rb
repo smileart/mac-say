@@ -1,14 +1,14 @@
+# frozen_string_literal: true
 require_relative 'say/version'
 require 'English'
 
 # Wrapper namespace module for a Say class
 module Mac
-
   # A class wrapper around the MacOS `say` commad
   # Allows to use simple TTS on Mac right from Ruby scripts
   class Say
     # A regex pattern to parse say voices list output
-    VOICES_PATTERN = %r{(^[\w-]+)\s+([\w-]+)\s+#\s([\p{Graph}\p{Zs}]+$)}i
+    VOICES_PATTERN = /(^[\w-]+)\s+([\w-]+)\s+#\s([\p{Graph}\p{Zs}]+$)/i
 
     # An error raised when `say` command couldn't be found
     class CommandNotFound < StandardError; end
@@ -60,7 +60,7 @@ module Mac
     # @param file [String] path to the file to read (default: nil)
     #
     # @raise [VoiceNotFound] if the given voice doesn't exist or wasn't installed
-    def initialize(voice: :alex, rate: 175, file: nil, say_path: ENV['USE_FAKE_SAY'] ? ENV['USE_FAKE_SAY'] : '/usr/bin/say')
+    def initialize(voice: :alex, rate: 175, file: nil, say_path: ENV['USE_FAKE_SAY'] || '/usr/bin/say')
       @config = {
         say_path: say_path,
         voice: voice,
@@ -71,7 +71,7 @@ module Mac
       @voices = nil
       load_voices
 
-      raise VoiceNotFound, "Voice '#{@config[:voice]}' isn't a valid voice" unless valid_voice? @config[:voice]
+      raise VoiceNotFound, "Voice '#{voice}' isn't a valid voice" unless valid_voice? voice
     end
 
     # Read the given string with the given voice
@@ -85,7 +85,7 @@ module Mac
     # @raise [CommandNotFound] if the say command wasn't found
     # @raise [VoiceNotFound] if the given voice doesn't exist or wasn't installed
     def self.say(string, voice = :alex)
-      mac = self.new(voice: voice.downcase.to_sym)
+      mac = new(voice: voice.downcase.to_sym)
       mac.say(string: string)
     end
 
@@ -133,7 +133,7 @@ module Mac
     #
     # @raise [UnknownVoiceFeature] if the voice feature isn't supported
     def self.voice(feature, name)
-      mac = self.new
+      mac = new
       mac.voice(feature, name)
     end
 
@@ -146,11 +146,10 @@ module Mac
     def voice(feature, value)
       raise UnknownVoiceFeature, "Voice has no '#{feature}' feature" unless [:name, :language, :country].include?(feature)
 
-      if feature == :name
-        found_voices = @voices.find_all {|v| v[feature] == value}
-      else
-        found_voices = @voices.find_all {|v| v[:iso_code][feature] == value}
-      end
+      condition = feature == :name ? ->(v) { v[feature] == value } : ->(v) { v[:iso_code][feature] == value }
+      found_voices = @voices.find_all(&condition)
+
+      return if found_voices.empty?
 
       found_voices.count == 1 ? found_voices.first : found_voices
     end
@@ -180,11 +179,11 @@ module Mac
     #          ...
     #      ]
     def self.voices
-      mac = self.new
+      mac = new
       mac.voices
     end
 
-    alias_method :read, :say
+    alias read say
 
     private
 
@@ -203,7 +202,7 @@ module Mac
       say.write(string) if string
       say.close
 
-      return say_command, $CHILD_STATUS.exitstatus
+      [say_command, $CHILD_STATUS.exitstatus]
     end
 
     # Command generation using current config
@@ -213,18 +212,21 @@ module Mac
     # @raise [CommandNotFound] if the say command wasn't found
     # @raise [FileNotFound] if the given file wasn't found or isn't readable by the current user
     def generate_command
-      raise CommandNotFound, "Command `say` couldn't be found by '#{@config[:say_path]}' path" unless valid_command_path? @config[:say_path]
+      say_path = @config[:say_path]
+      file = @config[:file]
 
-      if @config[:file] && !valid_file_path?(@config[:file])
-        raise FileNotFound, "File '#{@config[:file]}' wasn't found or it's not readable by the current user"
+      raise CommandNotFound, "Command `say` couldn't be found by '#{@config[:say_path]}' path" unless valid_command_path? say_path
+
+      if file && !valid_file_path?(file)
+        raise FileNotFound, "File '#{file}' wasn't found or it's not readable by the current user"
       end
 
-      file = @config[:file] ? " -f #{@config[:file]}" : ''
+      file = file ? " -f #{@config[:file]}" : ''
       "#{@config[:say_path]}#{file} -v '#{@config[:voice]}' -r #{@config[:rate].to_i}"
     end
 
     # Parsing voices list from the `say` command itself
-    # Memoise voices list for the instance
+    # Memoize voices list for the instance
     #
     # @return [Array<Hash>, nil] an array of voices Hashes supported by the say command or nil
     #   if voices where parsed before and stored in @voices instance variable
@@ -232,14 +234,11 @@ module Mac
     # @raise [CommandNotFound] if the say command wasn't found
     def load_voices
       return if @voices
-      raise CommandNotFound, "Command `say` couldn't be found by '#{@config[:say_path]}' path" unless valid_command_path? @config[:say_path]
+      say_path = @config[:say_path]
+      raise CommandNotFound, "Command `say` couldn't be found by '#{say_path}' path" unless valid_command_path? say_path
 
-      output = `#{@config[:say_path]} -v '?'`
-
-      @voices = output.scan VOICES_PATTERN
-      @voices.map! do |voice|
+      @voices = `#{say_path} -v '?'`.scan(VOICES_PATTERN).map do |voice|
         lang = voice[1].split(/[_-]/)
-
         {
           name: voice[0].downcase.to_sym,
           iso_code: { language: lang[0].downcase.to_sym, country: lang[1].downcase.to_sym },
@@ -256,9 +255,7 @@ module Mac
     # @raise [CommandNotFound] if the say command wasn't found
     def valid_voice?(name)
       load_voices unless @voices
-
-      v = voice(:name, name)
-      v && !v.empty?
+      voice(:name, name)
     end
 
     # Checks say command existence by the path
@@ -276,3 +273,5 @@ module Mac
     end
   end
 end
+
+p Mac::Say.voice(:name, 'fuck')

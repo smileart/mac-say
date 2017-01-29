@@ -1,4 +1,5 @@
 #! /usr/bin/env ruby
+# frozen_string_literal: true
 require 'optparse'
 
 VOICES = <<-VOICES
@@ -23,27 +24,28 @@ options = {
 }
 
 OptionParser.new do |opts|
-  opts.banner = "Usage: say [options]"
+  opts.banner = 'Usage: say [options]'
 
-  opts.on("-v VOICE") do |v|
+  opts.on('-v VOICE') do |v|
     options[:voice] = v.to_sym
   end
 
-  opts.on("-r RATE") do |r|
+  opts.on('-r RATE') do |r|
     options[:rate] = r.to_i
   end
 
-  opts.on("-f FILE") do |f|
+  opts.on('-f FILE') do |f|
     options[:file] = f
   end
 end.parse!
 
-if !STDIN.tty? && !STDIN.closed?
-  input = STDIN.read
-end
+input = STDIN.read if !STDIN.tty? && !STDIN.closed?
 
 if options[:voice]
-  (print VOICES; exit 0) if options[:voice] == :'?'
+  if options[:voice] == :'?'
+    print VOICES
+    exit 0
+  end
   exit 1 unless VOICES_NAMES.include?(options[:voice])
   exit 0 if input && !input.empty?
 end

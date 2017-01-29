@@ -1,4 +1,5 @@
-  # encoding: utf-8
+# frozen_string_literal: true
+# encoding: utf-8
 
 require 'rubygems'
 
@@ -9,8 +10,6 @@ rescue LoadError => e
 end
 
 require 'rake'
-
-
 require 'rubygems/tasks'
 Gem::Tasks.new
 

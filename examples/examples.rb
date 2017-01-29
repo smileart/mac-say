@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'pp'
 require_relative '../lib/mac/say'
 
@@ -7,9 +8,9 @@ require_relative '../lib/mac/say'
 pp Mac::Say.voices
 
 # Collect the separate features lists
-pp Mac::Say.voices.collect {|v| v[:name]}
-pp Mac::Say.voices.collect {|v| v[:iso_code]}
-pp Mac::Say.voices.collect {|v| v[:sample]}
+pp Mac::Say.voices.collect { |v| v[:name] }
+pp Mac::Say.voices.collect { |v| v[:iso_code] }
+pp Mac::Say.voices.collect { |v| v[:sample] }
 
 # Find a voice (returns a Hash)
 pp Mac::Say.voice(:name, :alex)
@@ -19,7 +20,7 @@ pp Mac::Say.voice(:country, :scotland)
 pp Mac::Say.voice(:language, :en)
 
 # Work with the voices collection
-indian_english = Mac::Say.voice(:country, :in).select {|v| v[:iso_code][:language] == :en}.first[:name]
+indian_english = Mac::Say.voice(:country, :in).select { |v| v[:iso_code][:language] == :en }.first[:name]
 
 # Use multiline text
 puts Mac::Say.say <<-DATA, indian_english
@@ -32,16 +33,16 @@ DATA
 
 # with constant name in the constructor and custom rate
 talker = Mac::Say.new(voice: :alex, rate: 300)
-talker.say string: "Hello world"
+talker.say string: 'Hello world'
 
 # with the voice name from the class method + dynamic sample
 talker = Mac::Say.new(voice: Mac::Say.voice(:country, :scotland)[:name])
 talker.say string: talker.voice(:country, :scotland)[:sample]
 
 # with the dynamic voice name selected from the multiple voices
-talker = Mac::Say.new
+talker = Mac::Say.news
 voice = talker.voice(:language, :en)&.sample(1)&.first&.fetch :name
-talker.say string: "Hello world!", voice: voice
+talker.say string: 'Hello world!', voice: voice
 
 # changing voice in runtime for an instance of talker (while saying something)
 voice = talker.voice(:country, :kr)
@@ -56,7 +57,7 @@ polyglot = Mac::Say.new
 voices = polyglot.voices
 
 voices.each_with_index do |v, i|
-  puts "#{i+1} :: #{v[:name]} :: '#{v[:sample]}'"
+  puts "#{i + 1} :: #{v[:name]} :: '#{v[:sample]}'"
   polyglot.say string: v[:sample], voice: v[:name]
 end
 
@@ -65,7 +66,7 @@ roll_call = Mac::Say.new
 voices = roll_call.voices
 
 voices.each_with_index do |v, i|
-  puts "#{i+1} :: #{v[:name]}"
+  puts "#{i + 1} :: #{v[:name]}"
   roll_call.say string: v[:name], voice: v[:name]
 end
 
@@ -75,7 +76,7 @@ end
 file_path = File.absolute_path '../test/fixtures/text/en_gb.txt', File.dirname(__FILE__)
 
 # with a voice from the class
-voice = Mac::Say.voice(:country, :gb)&.first[:name]
+voice = Mac::Say.voice(:country, :gb)&.first&.fetch(:name)
 reader = Mac::Say.new(file: file_path, voice: voice)
 reader.read
 
@@ -95,7 +96,6 @@ new_file_path = File.absolute_path '../test/fixtures/text/en_us.txt', File.dirna
 reader = Mac::Say.new(file: file_path)
 reader.read voice: :alex
 reader.read file: new_file_path
-
 
 # ===== Exceptions =====
 
