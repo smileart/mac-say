@@ -36,6 +36,11 @@ describe 'Mac::Say as a macOS `say` wrapper' do
       voice[:name].must_equal :alex
     end
 
+    it '.voice must accept String as a value' do
+      voice = Mac::Say.voice(:name, 'alex')
+      voice[:name].must_equal :alex
+    end
+
     it '.voice must search for a voice by country' do
       voice = Mac::Say.voice(:country, :scotland)
       voice[:name].must_equal :fiona
