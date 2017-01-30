@@ -6,7 +6,7 @@
 
 > Ruby wrapper around the modern version of the macOS `say` command. Inspired by the @bratta's [mactts](https://github.com/bratta/mactts)
 >
-> [![Build Status](https://travis-ci.org/smileart/mac-say.svg?branch=dev)](https://travis-ci.org/smileart/mac-say) [![Coverage Status](https://coveralls.io/repos/github/smileart/mac-say/badge.svg?branch=dev)](https://coveralls.io/github/smileart/mac-say?branch=dev) [![Code Climate](https://codeclimate.com/github/smileart/mac-say/badges/gpa.svg)](https://codeclimate.com/github/smileart/mac-say) [![InchCI Status](https://inch-ci.org/github/smileart/mac-say.svg?branch=dev)](https://inch-ci.org/github/smileart/mac-say)
+> [![Build Status](https://travis-ci.org/smileart/mac-say.svg?branch=dev)](https://travis-ci.org/smileart/mac-say) [![Coverage Status](https://coveralls.io/repos/github/smileart/mac-say/badge.svg?branch=dev)](https://coveralls.io/github/smileart/mac-say?branch=dev) [![Code Climate](https://codeclimate.com/github/smileart/mac-say/badges/gpa.svg)](https://codeclimate.com/github/smileart/mac-say) [![InchCI Status](https://inch-ci.org/github/smileart/mac-say.svg?branch=dev)](https://inch-ci.org/github/smileart/mac-say) [![mac-say gem](https://img.shields.io/gem/v/mac-say.svg)](https://rubygems.org/gems/mac-say)
 
 * [Homepage](https://rubygems.org/gems/mac-say)
 * [Documentation](http://rubydoc.info/gems/mac-say/frames)
