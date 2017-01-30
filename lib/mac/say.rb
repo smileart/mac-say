@@ -145,6 +145,7 @@ module Mac
     # @raise [UnknownVoiceFeature] if the voice feature isn't supported
     def voice(feature, value)
       raise UnknownVoiceFeature, "Voice has no '#{feature}' feature" unless [:name, :language, :country].include?(feature)
+      value = value.to_sym
 
       condition = feature == :name ? ->(v) { v[feature] == value } : ->(v) { v[:iso_code][feature] == value }
       found_voices = @voices.find_all(&condition)
@@ -273,5 +274,3 @@ module Mac
     end
   end
 end
-
-p Mac::Say.voice(:name, 'fuck')
