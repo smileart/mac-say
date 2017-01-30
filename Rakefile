@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # encoding: utf-8
 
 require 'rubygems'
@@ -9,8 +10,6 @@ rescue LoadError => e
 end
 
 require 'rake'
-
-
 require 'rubygems/tasks'
 Gem::Tasks.new
 
@@ -22,6 +21,7 @@ Rake::TestTask.new do |test|
   test.verbose = true
 end
 
-require 'yard'
-YARD::Rake::YardocTask.new  
-task :doc => :yard
+# Wait for https://github.com/rrrene/inch/issues/42 to be resolved
+# require 'yard'
+# YARD::Rake::YardocTask.new
+# task :doc => :yard

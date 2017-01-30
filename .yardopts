@@ -1,1 +1,1 @@
---markup markdown --title "mac-say Documentation" --protected
+--markup markdown --markup-provider=redcarpet --title "mac-say Documentation" --protected --asset img:img
