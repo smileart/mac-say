@@ -6,6 +6,6 @@ module Mac
   # Allows to use simple TTS on Mac right from Ruby scripts
   class Say
     # mac-say version
-    VERSION = '0.1.0'
+    VERSION = '0.1.1'
   end
 end
