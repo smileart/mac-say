@@ -94,7 +94,7 @@ module Mac
     # Providing file, voice or rate arguments changes instance state and influence
     # all the subsequent #say calls unless they have their own custom arguments
     #
-    # @param string [String] a text to read using say command
+    # @param string [String] a text to read using say command (default: nil)
     # @param file [String] path to the file to read (default: nil)
     # @param voice [Symbol] voice to be used by the say command (default: :alex)
     # @param rate [Integer] speech rate in words per minute (default: 175) accepts values in (175..720)
@@ -126,18 +126,24 @@ module Mac
       execute_command(string)
     end
 
-    # Find a voice by one of its features (e.g. :name, :language, :country)
+    # Find voice(s) by one of its features (e.g. :name, :language, :country)
+    #
+    # @param feature [Symbol] the feature to search voices by
+    # @param value [Symbol, String] the value of the feature to search voices by
     #
     # @return [Array<Hash>, Hash] an array with all the voices matched by the feature or
     #   a voice Hash if only one voice corresponds to the feature
     #
     # @raise [UnknownVoiceFeature] if the voice feature isn't supported
-    def self.voice(feature, name)
+    def self.voice(feature, value)
       mac = new
-      mac.voice(feature, name)
+      mac.voice(feature, value)
     end
 
-    # Find a voice by one of its features (e.g. :name, :language, :country)
+    # Find voice(s) by one of its features (e.g. :name, :language, :country)
+    #
+    # @param feature [Symbol] the feature to search voices by
+    # @param value [Symbol, String] the value of the feature to search voices by
     #
     # @return [Array<Hash>, Hash] an array with all the voices matched by the feature or
     #   a voice Hash if only one voice corresponds to the feature
@@ -251,6 +257,8 @@ module Mac
     # Checks voice existence by the name
     # Loads voices if they weren't loaded before
     #
+    # @param name [String, Symbol] the name of the voice to validate
+    #
     # @return [Boolean] if the voices name in the list of voices
     #
     # @raise [CommandNotFound] if the say command wasn't found
@@ -261,12 +269,16 @@ module Mac
 
     # Checks say command existence by the path
     #
+    # @param path [String] the path of the `say` command to validate
+    #
     # @return [Boolean] if the command exists and if it is executable
     def valid_command_path?(path)
       File.exist?(path) && File.executable?(path)
     end
 
     # Checks text file existence by the path
+    #
+    # @param path [String] the path of the text file validate
     #
     # @return [Boolean] if the file exists and if it is readable
     def valid_file_path?(path)
