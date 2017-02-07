@@ -150,6 +150,7 @@ module Mac
     #
     # @raise [UnknownVoiceFeature] if the voice feature isn't supported
     def voice(feature, value)
+      # @TODO Look for a voice by more than one fature
       raise UnknownVoiceFeature, "Voice has no '#{feature}' feature" unless [:name, :language, :country].include?(feature)
       value = value.to_sym
 
