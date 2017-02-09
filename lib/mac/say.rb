@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 require_relative 'say/version'
+require_relative 'say/voices_attributes'
+
 require 'English'
 
 # Wrapper namespace module for a Say class
@@ -235,16 +237,21 @@ module Mac
     # @raise [CommandNotFound] if the say command wasn't found
     def load_voices
       return if @voices
+
       say_path = @config[:say_path]
       raise CommandNotFound, "Command `say` couldn't be found by '#{say_path}' path" unless valid_command_path? say_path
 
       @voices = `#{say_path} -v '?'`.scan(VOICES_PATTERN).map do |voice|
         lang = voice[1].split(/[_-]/)
+        name = voice[0].downcase.to_sym
+
+        attributes = VOICES_ATTRIBUTES[name] || {}
+
         {
-          name: voice[0].downcase.to_sym,
+          name: name,
           iso_code: { language: lang[0].downcase.to_sym, country: lang[1].downcase.to_sym },
           sample: voice[2]
-        }
+        }.merge(attributes)
       end
     end
 

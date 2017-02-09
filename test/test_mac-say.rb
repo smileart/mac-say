@@ -21,7 +21,7 @@ describe 'Mac::Say as a macOS `say` wrapper' do
       voice = Mac::Say.voice(:name, :alex)
       voice.wont_be_empty
       voice.must_be_kind_of Hash
-      voice.keys.must_equal [:name, :iso_code, :sample]
+      voice.keys.must_equal [:name, :iso_code, :sample, :gender, :joke, :quality]
     end
 
     it 'must return specific Hash structure for an iso_code' do
