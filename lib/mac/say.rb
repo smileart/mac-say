@@ -245,7 +245,7 @@ module Mac
         lang = voice[1].split(/[_-]/)
         name = voice[0].downcase.to_sym
 
-        attributes = VOICES_ATTRIBUTES[name] || {}
+        attributes = VOICES_ATTRIBUTES[name] || VOICES_ATTRIBUTES[:_unknown_voice]
 
         {
           name: name,

@@ -4,6 +4,11 @@
 #
 # WARNING: all the attributes values provided here are highly subjective!!!
 VOICES_ATTRIBUTES = {
+    _unknown_voice: {
+      gender: nil,
+      joke: nil,
+      quality: nil
+    },
     agnes: {
       gender: :female,
       joke: false,
