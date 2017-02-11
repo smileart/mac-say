@@ -36,7 +36,10 @@ module Mac
     #                  :language => :en,
     #                  :country => :us
     #              },
-    #              :sample => "Isn't it nice to have a computer that will talk to you?"
+    #              :sample => "Isn't it nice to have a computer that will talk to you?",
+    #              :gender => :female,
+    #              :joke => false,
+    #              :quality => :low
     #          },
     #          {
     #              :name => :albert,
@@ -44,7 +47,10 @@ module Mac
     #                  :language => :en,
     #                  :country => :us
     #              },
-    #              :sample => " I have a frog in my throat. No, I mean a real frog!"
+    #              :sample => " I have a frog in my throat. No, I mean a real frog!",
+    #              :gender => :male,
+    #              :joke => true,
+    #              :quality => :medium
     #          },
     #          ...
     #      ]
@@ -139,7 +145,7 @@ module Mac
       mac.voice(feature, name)
     end
 
-    # Find a voice by one of its features (e.g. :name, :language, :country)
+    # Find a voice by one of its features (e.g. :name, :language, :country, :gender)
     #
     # @return [Array<Hash>, Hash] an array with all the voices matched by the feature or
     #   a voice Hash if only one voice corresponds to the feature
@@ -169,7 +175,10 @@ module Mac
     #                  :language => :en,
     #                  :country => :us
     #              },
-    #              :sample => "Isn't it nice to have a computer that will talk to you?"
+    #              :sample => "Isn't it nice to have a computer that will talk to you?",
+    #              :gender => :female,
+    #              :joke => false,
+    #              :quality => :low
     #          },
     #          {
     #              :name => :albert,
@@ -177,7 +186,10 @@ module Mac
     #                  :language => :en,
     #                  :country => :us
     #              },
-    #              :sample => " I have a frog in my throat. No, I mean a real frog!"
+    #              :sample => " I have a frog in my throat. No, I mean a real frog!",
+    #              :gender => :male,
+    #              :joke => true,
+    #              :quality => :medium
     #          },
     #          ...
     #      ]
