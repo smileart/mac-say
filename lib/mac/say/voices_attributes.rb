@@ -3,7 +3,7 @@
 # is inconsistent, fragmentary and sometimes incorrect, but:
 #
 # WARNING: all the attributes values provided here are highly subjective!!!
-VOICES_ATTRIBUTES = {
+ADDITIONAL_VOICE_ATTRIBUTES = {
     _unknown_voice: {
       gender: nil,
       joke: nil,

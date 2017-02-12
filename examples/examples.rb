@@ -9,7 +9,7 @@ pp Mac::Say.voices
 
 # Collect the separate features lists
 pp Mac::Say.voices.collect { |v| v[:name] }
-pp Mac::Say.voices.collect { |v| v[:iso_code] }
+pp Mac::Say.voices.collect { |v| v[:language] }
 pp Mac::Say.voices.collect { |v| v[:sample] }
 
 # Find a voice (returns a Hash)
@@ -20,7 +20,7 @@ pp Mac::Say.voice(:country, :scotland)
 pp Mac::Say.voice(:language, :en)
 
 # Work with the voices collection
-indian_english = Mac::Say.voice(:country, :in).select { |v| v[:iso_code][:language] == :en }.first[:name]
+indian_english = Mac::Say.voice(:country, :in).select { |v| v[:language] == :en }.first[:name]
 
 # Use multiline text
 puts Mac::Say.say <<-DATA, indian_english
@@ -40,7 +40,7 @@ talker = Mac::Say.new(voice: Mac::Say.voice(:country, :scotland)[:name])
 talker.say string: talker.voice(:country, :scotland)[:sample]
 
 # with the dynamic voice name selected from the multiple voices
-talker = Mac::Say.news
+talker = Mac::Say.new
 voice = talker.voice(:language, :en)&.sample(1)&.first&.fetch :name
 talker.say string: 'Hello world!', voice: voice
 
@@ -148,13 +148,13 @@ end
 # wrong feature
 begin
   Mac::Say.voice(:tone, :enthusiastic)
-rescue Mac::Say::UnknownVoiceFeature => e
+rescue Mac::Say::UnknownVoiceAttribute => e
   puts e.message
 end
 
 # wrong feature
 begin
   Mac::Say.new.voice(:articulation, :nostalgic)
-rescue Mac::Say::UnknownVoiceFeature => e
+rescue Mac::Say::UnknownVoiceAttribute => e
   puts e.message
 end
