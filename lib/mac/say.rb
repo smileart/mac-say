@@ -149,9 +149,14 @@ module Mac
     #   a voice Hash if only one voice corresponds to the attribute, nil if no voices found
     #
     # @raise [UnknownVoiceAttribute] if the voice attribute isn't supported
-    def self.voice(attribute, name)
+    def self.voice(attribute = nil, value = nil, &block)
       mac = new
-      mac.voice(attribute, name)
+
+      if block_given?
+        mac.voice &block
+      else
+        mac.voice(attribute, value)
+      end
     end
 
     # Find a voice by one of its attributes (e.g. :name, :language, :country, :gender)
@@ -160,12 +165,12 @@ module Mac
     #   a voice Hash if only one voice corresponds to the attribute, nil if no voices found
     #
     # @raise [UnknownVoiceAttribute] if the voice attribute isn't supported
-    def voice(attribute = nil, value = nil)
-      return unless (attribute && value) || (block_given?)
-      raise UnknownVoiceAttribute, "Voice has no '#{attribute}' attribute" unless VOICE_ATTRIBUTES.include?(attribute)
+    def voice(attribute = nil, value = nil, &block)
+      return unless (attribute && value) || block_given?
+      raise UnknownVoiceAttribute, "Voice has no '#{attribute}' attribute" if attribute && !VOICE_ATTRIBUTES.include?(attribute)
 
       if block_given?
-        found_voices = @voices.find_all &block
+        found_voices = @voices.find_all(&block)
       else
         found_voices = @voices.find_all {|voice| voice[attribute] === value }
       end
@@ -306,4 +311,10 @@ module Mac
       path && File.exist?(path) && File.readable?(path)
     end
   end
+end
+
+if __FILE__ == $0
+  p Mac::Say.new.voice(:joke, true)
+  p Mac::Say.voice(nil, nil) { |v| v[:joke] == true && v[:gender] == :female }
+  p Mac::Say.voice(nil, nil) { |v| v[:language] == :en && v[:gender] == :male && v[:quality] == :high && v[:joke] == false }
 end
