@@ -299,7 +299,7 @@ ADDITIONAL_VOICE_ATTRIBUTES = {
       joke: false,
       quality: :low
     },
-    'mei-jia': {
+    :'mei-jia' => {
       gender: :female,
       joke: false,
       quality: :medium
@@ -399,7 +399,7 @@ ADDITIONAL_VOICE_ATTRIBUTES = {
       joke: false,
       quality: :medium
     },
-    'sin-ji': {
+    :'sin-ji' => {
       gender: :female,
       joke: false,
       quality: :medium
@@ -429,7 +429,7 @@ ADDITIONAL_VOICE_ATTRIBUTES = {
       joke: false,
       quality: :high
     },
-    'ting-ting': {
+    :'ting-ting' => {
       gender: :female,
       joke: false,
       quality: :high
