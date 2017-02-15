@@ -35,19 +35,14 @@ describe 'Mac::Say as a macOS `say` wrapper' do
       voice[:quality].must_equal additional_voice_attributes[:quality]
     end
 
-    it '.voice must search for a voice by name' do
+    it '.voice must search for a voice using single attribute' do
       voice = Mac::Say.voice(:name, :alex)
       voice[:name].must_equal :alex
     end
 
-    it '.voice must search for a voice by country' do
-      voice = Mac::Say.voice(:country, :scotland)
-      voice[:name].must_equal :fiona
-    end
-
-    it '.voice must search for a voice by language' do
-      voices = Mac::Say.voice(:language, :en)
-      voices.count.must_be :>, 2
+    it '.voice must search for a voice using block given' do
+      voices = Mac::Say.voice {|voice| voice[:language] == :en && voice[:joke] == false }
+      voices.must_be_kind_of Array
     end
 
     it '.voice must return one voice as a Hash' do
@@ -64,6 +59,7 @@ describe 'Mac::Say as a macOS `say` wrapper' do
       voices = Mac::Say.voice(:name, :xxx)
       voices.must_be_nil
     end
+
 
     it '.say must return 0 in successive speech' do
       expectation = ["#{@say_path} -v 'alex' -r 175", 0]

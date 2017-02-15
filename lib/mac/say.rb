@@ -24,6 +24,7 @@ module Mac
     # An error raised when there is no a attribute of voice to match
     class UnknownVoiceAttribute < StandardError; end
 
+    # The list of the voice attributes available
     VOICE_ATTRIBUTES = [
       :name,
       :language,
@@ -140,33 +141,58 @@ module Mac
       execute_command(string)
     end
 
-    # Find voice(s) by one of its features (e.g. :name, :language, :country, :gender)
+    # Look for voices by their attributes (e.g. :name, :language, :country, :gender, etc.)
     #
-    # @param feature [Symbol] the feature to search voices by
-    # @param value [Symbol, String] the value of the feature to search voices by
+    # @overload voice(attribute, value)
+    #   @param attribute [Symbol] the attribute to search voices by
+    #   @param value [Symbol, String] the value of the attribute to search voices by
+    # @overload voice(&block)
+    #   @yield [voice] Passes the given block to @voices.find_all
     #
     # @return [Array<Hash>, Hash, nil] an array with all the voices matched by the attribute or
     #   a voice Hash if only one voice corresponds to the attribute, nil if no voices found
     #
-    # @raise [UnknownVoiceAttribute] if the voice attribute isn't supported
+    # @example Find voices by one or more attributes
+    #
+    #   Mac::Say.new.voice(:joke, false)
+    #   Mac::Say.new.voice(:gender, :female)
+    #
+    #   Mac::Say.new.voice { |v| v[:joke] == true && v[:gender] == :female }
+    #   Mac::Say.new.voice { |v| v[:language] == :en && v[:gender] == :male && v[:quality] == :high && v[:joke] == false }
+    #
+    # @raise [UnknownVoiceAttribute] if the voice attribute isn't supported    def self.voice(attribute = nil, value = nil, &block)
     def self.voice(attribute = nil, value = nil, &block)
       mac = new
 
       if block_given?
-        mac.voice &block
+        mac.voice(&block)
       else
         mac.voice(attribute, value)
       end
     end
 
-    # Find a voice by one of its attributes (e.g. :name, :language, :country, :gender)
+    # Look for voices by their attributes (e.g. :name, :language, :country, :gender, etc.)
+    #
+    # @overload voice(attribute, value)
+    #   @param attribute [Symbol] the attribute to search voices by
+    #   @param value [Symbol, String] the value of the attribute to search voices by
+    # @overload voice(&block)
+    #   @yield [voice] Passes the given block to @voices.find_all
     #
     # @return [Array<Hash>, Hash, nil] an array with all the voices matched by the attribute or
     #   a voice Hash if only one voice corresponds to the attribute, nil if no voices found
     #
+    # @example Find voices by one or more attributes
+    #
+    #   Mac::Say.new.voice(:joke, false)
+    #   Mac::Say.new.voice(:gender, :female)
+    #
+    #   Mac::Say.new.voice { |v| v[:joke] == true && v[:gender] == :female }
+    #   Mac::Say.new.voice { |v| v[:language] == :en && v[:gender] == :male && v[:quality] == :high && v[:joke] == false }
+    #
     # @raise [UnknownVoiceAttribute] if the voice attribute isn't supported
     def voice(attribute = nil, value = nil, &block)
-      return unless (attribute && value) || block_given?
+      return unless (attribute && !value.nil?) || block_given?
       raise UnknownVoiceAttribute, "Voice has no '#{attribute}' attribute" if attribute && !VOICE_ATTRIBUTES.include?(attribute)
 
       if block_given?
@@ -240,7 +266,7 @@ module Mac
     # @raise [FileNotFound] if the given file wasn't found or isn't readable by the current user
     def generate_command
       say_path = @config[:say_path]
-      file = @config[:file]
+      file     = @config[:file]
 
       raise CommandNotFound, "Command `say` couldn't be found by '#{@config[:say_path]}' path" unless valid_command_path? say_path
 
@@ -311,10 +337,4 @@ module Mac
       path && File.exist?(path) && File.readable?(path)
     end
   end
-end
-
-if __FILE__ == $0
-  p Mac::Say.new.voice(:joke, true)
-  p Mac::Say.voice(nil, nil) { |v| v[:joke] == true && v[:gender] == :female }
-  p Mac::Say.voice(nil, nil) { |v| v[:language] == :en && v[:gender] == :male && v[:quality] == :high && v[:joke] == false }
 end

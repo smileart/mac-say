@@ -1,8 +1,11 @@
-# Unfortunately information in system *.plist files
-# e.g. /System/Library/Speech/Voices/<VoiceName>.SpeechVoice/Contents/Info.plist"
-# is inconsistent, fragmentary and sometimes incorrect, but:
+# Additional voice attributes mixed to the original Hash of
+# parsed voices (to provide additional context when looking for a voice)
 #
-# WARNING: all the attributes values provided here are highly subjective!!!
+# @note Unfortunately information in system *.plist files
+#   e.g. /System/Library/Speech/Voices/<VoiceName>.SpeechVoice/Contents/Info.plist"
+#   is inconsistent, fragmentary and sometimes incorrect, but:
+#
+#   WARNING: all the attributes values provided here are highly subjective!!!
 ADDITIONAL_VOICE_ATTRIBUTES = {
     _unknown_voice: {
       gender: nil,

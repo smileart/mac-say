@@ -7,10 +7,18 @@ require_relative '../lib/mac/say'
 # Get all the voices
 pp Mac::Say.voices
 
-# Collect the separate features lists
+# Collect the separate attributes lists
 pp Mac::Say.voices.collect { |v| v[:name] }
 pp Mac::Say.voices.collect { |v| v[:language] }
 pp Mac::Say.voices.collect { |v| v[:sample] }
+
+# Look for voices by an attribute
+pp Mac::Say.voice(:joke, false)
+pp Mac::Say.voice(:gender, :female)
+
+# Look for voices by multiple attributes
+pp Mac::Say.voice { |v| v[:joke] == true && v[:gender] == :female }
+pp Mac::Say.voice { |v| v[:language] == :en && v[:gender] == :male && v[:quality] == :high && v[:joke] == false }
 
 # Find a voice (returns a Hash)
 pp Mac::Say.voice(:name, :alex)
