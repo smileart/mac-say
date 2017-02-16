@@ -9,6 +9,7 @@ Fiona               en-scotland # Hello, my name is Fiona. I am a Scottish-Engli
 Serena              en_GB    # Hello, my name is Serena. I am a British-English voice.
 Ting-Ting           zh_CN    # 您好，我叫Ting-Ting。我讲中文普通话。
 Veena               en_IN    # Hello, my name is Veena. I am an Indian-English voice.
+Test                en_GB    # Well I'm the most mysterious voice round here, believe me.
 VOICES
 
 VOICES_NAMES = [
@@ -16,7 +17,8 @@ VOICES_NAMES = [
   :daniel,
   :fiona,
   :'ting-ting',
-  :veena
+  :veena,
+  :test
 ]
 
 options = {

@@ -19,7 +19,7 @@
 * [x] Multiline strings support
 * [x] Dynamic voices parsing (based on real `say` output)
 * [x] Voices list generation (including samples and ISO information)
-* [x] Voices search (by name / language / country)
+* [x] Voices search (by name / language / country / etc.)
 * [x] Simple (class-level) and customisable (instance-level) usage
 * [ ] Observe reading progress line by line❓
 * [ ] Audio output support❓
@@ -41,10 +41,18 @@ require 'mac/say'
 # Get all the voices
 pp Mac::Say.voices
 
-# Collect the separate features lists
+# Collect the separate attributes lists
 pp Mac::Say.voices.collect { |v| v[:name] }
-pp Mac::Say.voices.collect { |v| v[:iso_code] }
+pp Mac::Say.voices.collect { |v| v[:language] }
 pp Mac::Say.voices.collect { |v| v[:sample] }
+
+# Look for voices by an attribute
+pp Mac::Say.voice(:joke, false)
+pp Mac::Say.voice(:gender, :female)
+
+# Look for voices by a buch of attributes
+pp Mac::Say.voice { |v| v[:joke] == true && v[:gender] == :female }
+pp Mac::Say.voice { |v| v[:language] == :en && v[:gender] == :male && v[:quality] == :high && v[:joke] == false }
 
 # Find a voice (returns a Hash)
 pp Mac::Say.voice(:name, :alex)
@@ -54,7 +62,7 @@ pp Mac::Say.voice(:country, :scotland)
 pp Mac::Say.voice(:language, :en)
 
 # Work with the voices collection
-indian_english = Mac::Say.voice(:country, :in).select { |v| v[:iso_code][:language] == :en }.first[:name]
+indian_english = Mac::Say.voice(:country, :in).select { |v| v[:language] == :en }.first[:name]
 
 # Use multiline text
 puts Mac::Say.say <<-DATA, indian_english
@@ -74,7 +82,7 @@ talker = Mac::Say.new(voice: Mac::Say.voice(:country, :scotland)[:name])
 talker.say string: talker.voice(:country, :scotland)[:sample]
 
 # with the dynamic voice name selected from the multiple voices
-talker = Mac::Say.news
+talker = Mac::Say.new
 voice = talker.voice(:language, :en)&.sample(1)&.first&.fetch :name
 talker.say string: 'Hello world!', voice: voice
 
@@ -182,14 +190,14 @@ end
 # wrong feature
 begin
   Mac::Say.voice(:tone, :enthusiastic)
-rescue Mac::Say::UnknownVoiceFeature => e
+rescue Mac::Say::UnknownVoiceAttribute => e
   puts e.message
 end
 
 # wrong feature
 begin
   Mac::Say.new.voice(:articulation, :nostalgic)
-rescue Mac::Say::UnknownVoiceFeature => e
+rescue Mac::Say::UnknownVoiceAttribute => e
   puts e.message
 end
 ```
