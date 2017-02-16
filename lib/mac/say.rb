@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 require_relative 'say/version'
+require_relative 'say/voices_attributes'
+
 require 'English'
 
 # Wrapper namespace module for a Say class
@@ -8,7 +10,7 @@ module Mac
   # Allows to use simple TTS on Mac right from Ruby scripts
   class Say
     # A regex pattern to parse say voices list output
-    VOICES_PATTERN = /(^[\w-]+)\s+([\w-]+)\s+#\s([\p{Graph}\p{Zs}]+$)/i
+    VOICE_PATTERN = /(^[\w-]+)\s+([\w-]+)\s+#\s([\p{Graph}\p{Zs}]+$)/i
 
     # An error raised when `say` command couldn't be found
     class CommandNotFound < StandardError; end
@@ -19,8 +21,19 @@ module Mac
     # An error raised when the given voice isn't valid
     class VoiceNotFound < StandardError; end
 
-    # An error raised when there is no a feature of voice to match
-    class UnknownVoiceFeature < StandardError; end
+    # An error raised when there is no a attribute of voice to match
+    class UnknownVoiceAttribute < StandardError; end
+
+    # The list of the voice attributes available
+    VOICE_ATTRIBUTES = [
+      :name,
+      :language,
+      :country,
+      :sample,
+      :gender,
+      :joke,
+      :quality
+    ]
 
     # Current voices list
     #
@@ -29,20 +42,22 @@ module Mac
     #   Mac::Say.voices #=>
     #      [
     #          {
-    #              :name => :agnes,
-    #              :iso_code => {
-    #                  :language => :en,
-    #                  :country => :us
-    #              },
-    #              :sample => "Isn't it nice to have a computer that will talk to you?"
+    #              :name     => :agnes,
+    #              :language => :en,
+    #              :country  => :us,
+    #              :sample   => "Isn't it nice to have a computer that will talk to you?",
+    #              :gender   => :female,
+    #              :joke     => false,
+    #              :quality  => :low
     #          },
     #          {
-    #              :name => :albert,
-    #              :iso_code => {
-    #                  :language => :en,
-    #                  :country => :us
-    #              },
-    #              :sample => " I have a frog in my throat. No, I mean a real frog!"
+    #              :name      => :albert,
+    #              :language  => :en,
+    #              :country   => :us,
+    #              :sample    => "I have a frog in my throat. No, I mean a real frog!",
+    #              :gender    => :male,
+    #              :joke      => true,
+    #              :quality   => :medium
     #          },
     #          ...
     #      ]
@@ -126,39 +141,67 @@ module Mac
       execute_command(string)
     end
 
-    # Find voice(s) by one of its features (e.g. :name, :language, :country)
+    # Look for voices by their attributes (e.g. :name, :language, :country, :gender, etc.)
     #
-    # @param feature [Symbol] the feature to search voices by
-    # @param value [Symbol, String] the value of the feature to search voices by
+    # @overload voice(attribute, value)
+    #   @param attribute [Symbol] the attribute to search voices by
+    #   @param value [Symbol, String] the value of the attribute to search voices by
+    # @overload voice(&block)
+    #   @yield [voice] Passes the given block to @voices.find_all
     #
-    # @return [Array<Hash>, Hash] an array with all the voices matched by the feature or
-    #   a voice Hash if only one voice corresponds to the feature
+    # @return [Array<Hash>, Hash, nil] an array with all the voices matched by the attribute or
+    #   a voice Hash if only one voice corresponds to the attribute, nil if no voices found
     #
-    # @raise [UnknownVoiceFeature] if the voice feature isn't supported
-    def self.voice(feature, value)
+    # @example Find voices by one or more attributes
+    #
+    #   Mac::Say.new.voice(:joke, false)
+    #   Mac::Say.new.voice(:gender, :female)
+    #
+    #   Mac::Say.new.voice { |v| v[:joke] == true && v[:gender] == :female }
+    #   Mac::Say.new.voice { |v| v[:language] == :en && v[:gender] == :male && v[:quality] == :high && v[:joke] == false }
+    #
+    # @raise [UnknownVoiceAttribute] if the voice attribute isn't supported    def self.voice(attribute = nil, value = nil, &block)
+    def self.voice(attribute = nil, value = nil, &block)
       mac = new
-      mac.voice(feature, value)
+
+      if block_given?
+        mac.voice(&block)
+      else
+        mac.voice(attribute, value)
+      end
     end
 
-    # Find voice(s) by one of its features (e.g. :name, :language, :country)
+    # Look for voices by their attributes (e.g. :name, :language, :country, :gender, etc.)
     #
-    # @param feature [Symbol] the feature to search voices by
-    # @param value [Symbol, String] the value of the feature to search voices by
+    # @overload voice(attribute, value)
+    #   @param attribute [Symbol] the attribute to search voices by
+    #   @param value [Symbol, String] the value of the attribute to search voices by
+    # @overload voice(&block)
+    #   @yield [voice] Passes the given block to @voices.find_all
     #
-    # @return [Array<Hash>, Hash] an array with all the voices matched by the feature or
-    #   a voice Hash if only one voice corresponds to the feature
+    # @return [Array<Hash>, Hash, nil] an array with all the voices matched by the attribute or
+    #   a voice Hash if only one voice corresponds to the attribute, nil if no voices found
     #
-    # @raise [UnknownVoiceFeature] if the voice feature isn't supported
-    def voice(feature, value)
-      # @TODO Look for a voice by more than one fature
-      raise UnknownVoiceFeature, "Voice has no '#{feature}' feature" unless [:name, :language, :country].include?(feature)
-      value = value.to_sym
+    # @example Find voices by one or more attributes
+    #
+    #   Mac::Say.new.voice(:joke, false)
+    #   Mac::Say.new.voice(:gender, :female)
+    #
+    #   Mac::Say.new.voice { |v| v[:joke] == true && v[:gender] == :female }
+    #   Mac::Say.new.voice { |v| v[:language] == :en && v[:gender] == :male && v[:quality] == :high && v[:joke] == false }
+    #
+    # @raise [UnknownVoiceAttribute] if the voice attribute isn't supported
+    def voice(attribute = nil, value = nil, &block)
+      return unless (attribute && !value.nil?) || block_given?
+      raise UnknownVoiceAttribute, "Voice has no '#{attribute}' attribute" if attribute && !VOICE_ATTRIBUTES.include?(attribute)
 
-      condition = feature == :name ? ->(v) { v[feature] == value } : ->(v) { v[:iso_code][feature] == value }
-      found_voices = @voices.find_all(&condition)
+      if block_given?
+        found_voices = @voices.find_all(&block)
+      else
+        found_voices = @voices.find_all {|voice| voice[attribute] === value }
+      end
 
       return if found_voices.empty?
-
       found_voices.count == 1 ? found_voices.first : found_voices
     end
 
@@ -169,20 +212,22 @@ module Mac
     #   Mac::Say.voices #=>
     #      [
     #          {
-    #              :name => :agnes,
-    #              :iso_code => {
-    #                  :language => :en,
-    #                  :country => :us
-    #              },
-    #              :sample => "Isn't it nice to have a computer that will talk to you?"
+    #              :name      => :agnes,
+    #              :language  => :en,
+    #              :country   => :us,
+    #              :sample    => "Isn't it nice to have a computer that will talk to you?",
+    #              :gender    => :female,
+    #              :joke      => false,
+    #              :quality   => :low
     #          },
     #          {
-    #              :name => :albert,
-    #              :iso_code => {
-    #                  :language => :en,
-    #                  :country => :us
-    #              },
-    #              :sample => " I have a frog in my throat. No, I mean a real frog!"
+    #              :name      => :albert,
+    #              :language  => :en,
+    #              :country   => :us,
+    #              :sample    => "I have a frog in my throat. No, I mean a real frog!",
+    #              :gender    => :male,
+    #              :joke      => true,
+    #              :quality   => :medium
     #          },
     #          ...
     #      ]
@@ -221,7 +266,7 @@ module Mac
     # @raise [FileNotFound] if the given file wasn't found or isn't readable by the current user
     def generate_command
       say_path = @config[:say_path]
-      file = @config[:file]
+      file     = @config[:file]
 
       raise CommandNotFound, "Command `say` couldn't be found by '#{@config[:say_path]}' path" unless valid_command_path? say_path
 
@@ -242,16 +287,22 @@ module Mac
     # @raise [CommandNotFound] if the say command wasn't found
     def load_voices
       return if @voices
+
       say_path = @config[:say_path]
       raise CommandNotFound, "Command `say` couldn't be found by '#{say_path}' path" unless valid_command_path? say_path
 
-      @voices = `#{say_path} -v '?'`.scan(VOICES_PATTERN).map do |voice|
+      @voices = `#{say_path} -v '?'`.scan(VOICE_PATTERN).map do |voice|
         lang = voice[1].split(/[_-]/)
+        name = voice[0].downcase.to_sym
+
+        additional_attributes = ADDITIONAL_VOICE_ATTRIBUTES[name] || ADDITIONAL_VOICE_ATTRIBUTES[:_unknown_voice]
+
         {
-          name: voice[0].downcase.to_sym,
-          iso_code: { language: lang[0].downcase.to_sym, country: lang[1].downcase.to_sym },
-          sample: voice[2]
-        }
+          name: name,
+          language: lang[0].downcase.to_sym,
+          country: lang[1].downcase.to_sym,
+          sample: voice[2].strip
+        }.merge(additional_attributes)
       end
     end
 

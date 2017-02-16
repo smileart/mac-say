@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 require 'helper'
 require 'mac/say'
+require 'mac/say/voices_attributes'
 
 describe 'Mac::Say as a macOS `say` wrapper' do
   describe 'On a class level' do
@@ -21,34 +22,27 @@ describe 'Mac::Say as a macOS `say` wrapper' do
       voice = Mac::Say.voice(:name, :alex)
       voice.wont_be_empty
       voice.must_be_kind_of Hash
-      voice.keys.must_equal [:name, :iso_code, :sample]
+      voice.keys.must_equal Mac::Say::VOICE_ATTRIBUTES
     end
 
-    it 'must return specific Hash structure for an iso_code' do
-      voice = Mac::Say.voice(:name, :alex)
-      voice.wont_be_empty
-      voice[:iso_code].must_be_kind_of Hash
-      voice[:iso_code].keys.must_equal [:language, :country]
+    it 'must return additional attributes for known voices' do
+      voice_name = :alex
+      voice = Mac::Say.voice(:name, voice_name)
+      additional_voice_attributes = ADDITIONAL_VOICE_ATTRIBUTES[voice_name]
+
+      voice[:gender].must_equal additional_voice_attributes[:gender]
+      voice[:joke].must_equal additional_voice_attributes[:joke]
+      voice[:quality].must_equal additional_voice_attributes[:quality]
     end
 
-    it '.voice must search for a voice by name' do
+    it '.voice must search for a voice using single attribute' do
       voice = Mac::Say.voice(:name, :alex)
       voice[:name].must_equal :alex
     end
 
-    it '.voice must accept String as a value' do
-      voice = Mac::Say.voice(:name, 'alex')
-      voice[:name].must_equal :alex
-    end
-
-    it '.voice must search for a voice by country' do
-      voice = Mac::Say.voice(:country, :scotland)
-      voice[:name].must_equal :fiona
-    end
-
-    it '.voice must search for a voice by language' do
-      voices = Mac::Say.voice(:language, :en)
-      voices.count.must_be :>, 2
+    it '.voice must search for a voice using block given' do
+      voices = Mac::Say.voice {|voice| voice[:language] == :en && voice[:joke] == false }
+      voices.must_be_kind_of Array
     end
 
     it '.voice must return one voice as a Hash' do
@@ -65,6 +59,7 @@ describe 'Mac::Say as a macOS `say` wrapper' do
       voices = Mac::Say.voice(:name, :xxx)
       voices.must_be_nil
     end
+
 
     it '.say must return 0 in successive speech' do
       expectation = ["#{@say_path} -v 'alex' -r 175", 0]
@@ -91,10 +86,10 @@ describe 'Mac::Say as a macOS `say` wrapper' do
       }.must_raise Mac::Say::VoiceNotFound
     end
 
-    it '.voice must fail on wrong voice feature' do
+    it '.voice must fail on wrong voice attribute' do
       -> {
         Mac::Say.voice(:tone, :enthusiastic)
-      }.must_raise Mac::Say::UnknownVoiceFeature
+      }.must_raise Mac::Say::UnknownVoiceAttribute
     end
   end
 
@@ -131,6 +126,17 @@ describe 'Mac::Say as a macOS `say` wrapper' do
 
       @reader = Mac::Say.new(file: absolute_path)
       @reader.say.must_equal expectation
+    end
+
+    it 'must return nil additional attrs for unknown voices' do
+      if ENV['USE_FAKE_SAY']
+        voice = @reader.voice(:name, :test)
+        additional_voice_attributes = ADDITIONAL_VOICE_ATTRIBUTES[:test]
+
+        voice[:gender].must_be_nil
+        voice[:joke].must_be_nil
+        voice[:quality].must_be_nil
+      end
     end
 
     it '#say must change :file from initial config' do
@@ -217,10 +223,10 @@ describe 'Mac::Say as a macOS `say` wrapper' do
       }.must_raise Mac::Say::FileNotFound
     end
 
-    it '#voice must fail on wrong feature' do
+    it '#voice must fail on wrong attribute' do
       -> {
         Mac::Say.new.voice(:articulation, :nostalgic)
-      }.must_raise Mac::Say::UnknownVoiceFeature
+      }.must_raise Mac::Say::UnknownVoiceAttribute
     end
 
     it '#say must fail on initial wrong file path' do
