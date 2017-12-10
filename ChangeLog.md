@@ -1,3 +1,10 @@
+v0.2.1 / 2017-12-10
+===================
+
+  * Added space separated voices support (MacOS High Sierra) i.e. 'Good news', 'Bad News', 'Pipe Organ'
+  * Added a new unofficial voice attribute `singing` (for voices like 'Cellos')
+  * Added a new ar_SA voice — 'Laila'
+
 v0.2.0 / 2017-02-16
 ===================
 
