@@ -10,7 +10,7 @@
 
 * [Homepage](https://rubygems.org/gems/mac-say)
 * [Documentation](http://rubydoc.info/gems/mac-say/frames)
-* [Email](mailto:smileart21 at gmail.com)
+* [Email](mailto:smileart21@gmail.com)
 
 ## Features
 
@@ -47,10 +47,11 @@ pp Mac::Say.voices.collect { |v| v[:language] }
 pp Mac::Say.voices.collect { |v| v[:sample] }
 
 # Look for voices by an attribute
+pp Mac::Say.voice(:singing, true)
 pp Mac::Say.voice(:joke, false)
 pp Mac::Say.voice(:gender, :female)
 
-# Look for voices by a buch of attributes
+# Look for voices by multiple attributes
 pp Mac::Say.voice { |v| v[:joke] == true && v[:gender] == :female }
 pp Mac::Say.voice { |v| v[:language] == :en && v[:gender] == :male && v[:quality] == :high && v[:joke] == false }
 
