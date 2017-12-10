@@ -10,7 +10,7 @@ module Mac
   # Allows to use simple TTS on Mac right from Ruby scripts
   class Say
     # A regex pattern to parse say voices list output
-    VOICE_PATTERN = /(^[\w-]+)\s+([\w-]+)\s+#\s([\p{Graph}\p{Zs}]+$)/i
+    VOICE_PATTERN = /(^[\w\s-]+)\s+([\w-]+)\s+#\s([\p{Graph}\p{Zs}]+$)/i
 
     # An error raised when `say` command couldn't be found
     class CommandNotFound < StandardError; end
@@ -32,7 +32,8 @@ module Mac
       :sample,
       :gender,
       :joke,
-      :quality
+      :quality,
+      :singing
     ]
 
     # Current voices list
@@ -48,7 +49,8 @@ module Mac
     #              :sample   => "Isn't it nice to have a computer that will talk to you?",
     #              :gender   => :female,
     #              :joke     => false,
-    #              :quality  => :low
+    #              :quality  => :low,
+    #              :singing  => false
     #          },
     #          {
     #              :name      => :albert,
@@ -57,7 +59,8 @@ module Mac
     #              :sample    => "I have a frog in my throat. No, I mean a real frog!",
     #              :gender    => :male,
     #              :joke      => true,
-    #              :quality   => :medium
+    #              :quality   => :medium,
+    #              :singing   => false
     #          },
     #          ...
     #      ]
@@ -218,7 +221,8 @@ module Mac
     #              :sample    => "Isn't it nice to have a computer that will talk to you?",
     #              :gender    => :female,
     #              :joke      => false,
-    #              :quality   => :low
+    #              :quality   => :low,
+    #              :singing   => false
     #          },
     #          {
     #              :name      => :albert,
@@ -227,7 +231,8 @@ module Mac
     #              :sample    => "I have a frog in my throat. No, I mean a real frog!",
     #              :gender    => :male,
     #              :joke      => true,
-    #              :quality   => :medium
+    #              :quality   => :medium,
+    #              :singing   => false
     #          },
     #          ...
     #      ]
@@ -293,7 +298,7 @@ module Mac
 
       @voices = `#{say_path} -v '?'`.scan(VOICE_PATTERN).map do |voice|
         lang = voice[1].split(/[_-]/)
-        name = voice[0].downcase.to_sym
+        name = voice[0].strip.downcase.to_sym
 
         additional_attributes = ADDITIONAL_VOICE_ATTRIBUTES[name] || ADDITIONAL_VOICE_ATTRIBUTES[:_unknown_voice]
 

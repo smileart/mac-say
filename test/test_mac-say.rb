@@ -50,6 +50,8 @@ describe 'Mac::Say as a macOS `say` wrapper' do
       voice.must_be_kind_of Hash
     end
 
+    # For this test to pass you'd have to have more than
+    # one British voice on your machine!
     it '.voice must return an Array of voices if > 1' do
       voices = Mac::Say.voice(:country, :gb)
       voices.must_be_kind_of Array

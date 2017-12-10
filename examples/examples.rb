@@ -13,6 +13,7 @@ pp Mac::Say.voices.collect { |v| v[:language] }
 pp Mac::Say.voices.collect { |v| v[:sample] }
 
 # Look for voices by an attribute
+pp Mac::Say.voice(:singing, true)
 pp Mac::Say.voice(:joke, false)
 pp Mac::Say.voice(:gender, :female)
 
