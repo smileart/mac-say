@@ -30,16 +30,16 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
 
-  gem.add_development_dependency 'bundler', '~> 1.10'
-  gem.add_development_dependency 'minitest', '~> 5.0'
-  gem.add_development_dependency 'minitest-reporters', '~> 1.1'
-  gem.add_development_dependency 'rake', '~> 12.0'
-  gem.add_development_dependency 'simplecov', '~> 0.12'
+  gem.add_development_dependency 'bundler', '~> 2.3'
+  gem.add_development_dependency 'minitest', '~> 5.15'
+  gem.add_development_dependency 'minitest-reporters', '~> 1.5'
+  gem.add_development_dependency 'rake', '~> 13.0'
+  gem.add_development_dependency 'simplecov', '~> 0.16'
   gem.add_development_dependency 'rubygems-tasks', '~> 0.2'
-  gem.add_development_dependency 'yard', '~> 0.8.7.5'
-  gem.add_development_dependency 'inch', '~> 0.7.1'
-  gem.add_development_dependency 'redcarpet', '~> 3.4'
-  gem.add_development_dependency 'github-markup', '~> 1.4'
-  gem.add_development_dependency 'm', '~> 1.5'
-  gem.add_development_dependency 'coveralls', '~> 0.8'
+  gem.add_development_dependency 'yard', '~> 0.9'
+  gem.add_development_dependency 'inch', '~> 0.8'
+  gem.add_development_dependency 'redcarpet', '~> 3.5'
+  gem.add_development_dependency 'github-markup', '~> 4.0'
+  gem.add_development_dependency 'm', '~> 1.6'
+  gem.add_development_dependency 'coveralls', '~> 0.8.23'
 end

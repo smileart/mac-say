@@ -203,16 +203,20 @@ rescue Mac::Say::UnknownVoiceAttribute => e
 end
 ```
 
-## Installing & Updating MacOS TTS Voices
+## Installing & Updating MacOS TTS Voices (MacOS 12.2+)
 
-Open `System Preferences` using Spotlight / Alfred / Dock and follow text or visual instructions:
+Open `System Preferences` using  Menu / Spotlight / Alfred / Dock and follow text or visual instructions:
 
 ```
-System Preferences → Accessibility → Speech → System Voice →
+System Preferences → Accessibility → Spoken Content → System Voice →
 → Customize… → (select voices) → OK → (Wait for download…)
 ```
 
 ![Installing & Updating MacOS TTS Voices](./img/voices_manual.png)
+
+## Caveats
+
+- All the `Siri...` voices you might see in the system voices list are not available in `say`, that's why you can not user them
 
 ## Dev Notes
 
@@ -237,10 +241,25 @@ $ bundle exec m
 
 # run one test by LN
 $ bundle exec m ./test/test_mac-say.rb:34
+
+# building gem
+$ gem build ./mac-say.gemspec && mv ./mac-say*.gem ./pkg
+
+# releasing gem
+$ gem push ./pkg/mac-say-<VERSION>.gem
+```
+
+__Additionally to update dependencies I use my [one-liner](https://gist.github.com/smileart/9d1d17e9da8cba19f792304fd4b0e58d).__
+
+```
+# A snippet to look for any new/unknown voices and test their attributes
+pp Mac::Say.voices.select {|v| v[:gender].nil? }
+talker = Mac::Say.new(voice: :rishi)
+talker.say string: 'Hello, my name is Rishi. I am an Indian-English voice.'
 ```
 
 ## Copyright
 
-Copyright (c) 2017 Serge Bedzhyk
+Copyright (c) 2022 Serge Bedzhyk
 
 See [LICENSE.txt](./LICENSE.txt) for details.

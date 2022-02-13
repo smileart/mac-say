@@ -3,9 +3,10 @@
 #
 # @note Unfortunately information in system *.plist files
 #   e.g. /System/Library/Speech/Voices/<VoiceName>.SpeechVoice/Contents/Info.plist"
-#   is inconsistent, fragmentary and sometimes incorrect, but:
+#   is inconsistent, fragmentary and sometimes incorrect, but also keep in mind:
 #
 #   WARNING: all the attributes values provided here are highly subjective!!!
+#
 ADDITIONAL_VOICE_ATTRIBUTES = {
     _unknown_voice: {
       gender: nil,
@@ -409,6 +410,12 @@ ADDITIONAL_VOICE_ATTRIBUTES = {
       quality: :medium,
       singing: false
     },
+    neel: {
+      gender: :male,
+      joke: false,
+      quality: :medium,
+      singing: false
+    },
     nicolas: {
       gender: :male,
       joke: false,
@@ -478,6 +485,12 @@ ADDITIONAL_VOICE_ATTRIBUTES = {
     ralph: {
       gender: :male,
       joke: true,
+      quality: :low,
+      singing: false
+    },
+    rishi: {
+      gender: :male,
+      joke: false,
       quality: :low,
       singing: false
     },
